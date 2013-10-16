@@ -1,12 +1,12 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 session_start();
-class products extends CI_Controller {
+class slideshows extends CI_Controller {
 	var $table;
 	var $controller;
 	public function __construct(){
 		parent::__construct();
 		$this->load->database();
-		$this->table = "products";
+		$this->table = "slideshows";
 	}
 	public function index(){
 		$table = $this->table;
@@ -49,35 +49,7 @@ class products extends CI_Controller {
 		$searchx = trim($_GET['search']);
 		
 		$sql = "select * from `".$table."`  where 1 ";
-		if($filter=='category_ids'){
-			$sqlx = "select * from `categories` where name like '%".mysql_real_escape_string($search)."%'";
-			$q = $this->db->query($sqlx);
-			$cats = $q->result_array();
-			$sqlext = array();
-			foreach($cats as $value){
-				$sqlext[] = "LOWER(`category_ids`) like '%|".$value['id']."|%'";
-			}
-			$sqlext = implode($sqlext, " or ");
-			if($sqlext){
-				$sql .= " and (".$sqlext.")";
-			}
-		}
-		else if($filter=='brand_id'){
-			$sqlx = "select * from `brands` where name like '%".mysql_real_escape_string($search)."%'";
-			$q = $this->db->query($sqlx);
-			$brands = $q->result_array();
-			$sqlext = array();
-			foreach($brands as $value){
-				$sqlext[] = "`brand_id` = '".$value['id']."'";
-			}
-			$sqlext = implode($sqlext, " or ");
-			if($sqlext){
-				$sql .= " and (".$sqlext.")";
-			}
-		}
-		
-		
-		else if($search != ''){
+		if($search != ''){
 			$sql .= "and LOWER(`".$filter."`) like '%".mysql_real_escape_string($search)."%'";
 		}
 		$sql .= " order by id desc limit $start, $limit" ;
@@ -88,33 +60,7 @@ class products extends CI_Controller {
 		$records = $q->result_array();
 				
 		$sql = "select count(id) as `cnt`  from `".$table."` where 1 ";
-		if($filter=='category_ids'){
-			$sqlx = "select * from `categories` where name like '%".mysql_real_escape_string($search)."%'";
-			$q = $this->db->query($sqlx);
-			$cats = $q->result_array();
-			$sqlext = array();
-			foreach($cats as $value){
-				$sqlext[] = "LOWER(`category_ids`) like '%|".$value['id']."|%'";
-			}
-			$sqlext = implode($sqlext, " or ");
-			if($sqlext){
-				$sql .= " and (".$sqlext.")";
-			}
-		}
-		else if($filter=='brand_id'){
-			$sqlx = "select * from `brands` where name like '%".mysql_real_escape_string($search)."%'";
-			$q = $this->db->query($sqlx);
-			$brands = $q->result_array();
-			$sqlext = array();
-			foreach($brands as $value){
-				$sqlext[] = "`brand_id` = '".$value['id']."'";
-			}
-			$sqlext = implode($sqlext, " or ");
-			if($sqlext){
-				$sql .= " and (".$sqlext.")";
-			}
-		}
-		else if($search != ''){
+		if($search != ''){
 			$sql .= "and LOWER(`".$filter."`) like '%".mysql_real_escape_string($search)."%'";
 		}
 		
@@ -156,16 +102,10 @@ class products extends CI_Controller {
 			$sql = " update `".$table."` set ";
 			//fields
 			//$sql .= " `name` = '".mysql_real_escape_string($_POST['name'])."'" ;									
-			$sql .= "   `name` = '".mysql_real_escape_string($_POST['name'])."'";
-$sql .= " , `description` = '".mysql_real_escape_string($_POST['description'])."'";
-$sql .= " , `price` = '".mysql_real_escape_string(preg_replace("/[^0-9\.]/", "", $_POST['price']))."'";
+			$sql .= "   `title` = '".mysql_real_escape_string($_POST['title'])."'";
+$sql .= " , `text` = '".mysql_real_escape_string($_POST['text'])."'";
 $sql .= " , `image_url` = '".mysql_real_escape_string($_POST['image_url'])."'";
-$sql .= " , `link` = '".mysql_real_escape_string($_POST['link'])."'";
-$sql .= " , `brand_id` = '".mysql_real_escape_string($_POST['brand_id'])."'";
-$sql .= " , `featured` = '".mysql_real_escape_string($_POST['featured']+0)."'";
-$sql .= " , `hidden` = '".mysql_real_escape_string($_POST['hidden']+0)."'";
-$sql .= " , `views` = '".mysql_real_escape_string($_POST['views'])."'";
-$sql .= " , `category_ids` = '".mysql_real_escape_string(implode($_POST['category_ids'], ","))."'";
+$sql .= " , `hidden` = '".mysql_real_escape_string($_POST['hidden'])."'";
 
 			
 			$sql .= " where `id` = '$id' limit 1";	
@@ -198,16 +138,10 @@ $sql .= " , `category_ids` = '".mysql_real_escape_string(implode($_POST['categor
 			$sql = "insert into `".$table."` set ";
 			/*fields*/
 			//$sql .= " `name` = '".mysql_real_escape_string($_POST['name'])."'" ;							
-			$sql .= "   `name` = '".mysql_real_escape_string($_POST['name'])."'";
-$sql .= " , `description` = '".mysql_real_escape_string($_POST['description'])."'";
-$sql .= " , `price` = '".mysql_real_escape_string(preg_replace("/[^0-9\.]/", "", $_POST['price']))."'";
+			$sql .= "   `title` = '".mysql_real_escape_string($_POST['title'])."'";
+$sql .= " , `text` = '".mysql_real_escape_string($_POST['text'])."'";
 $sql .= " , `image_url` = '".mysql_real_escape_string($_POST['image_url'])."'";
-$sql .= " , `link` = '".mysql_real_escape_string($_POST['link'])."'";
-$sql .= " , `brand_id` = '".mysql_real_escape_string($_POST['brand_id'])."'";
-$sql .= " , `featured` = '".mysql_real_escape_string($_POST['featured']+0)."'";
-$sql .= " , `hidden` = '".mysql_real_escape_string($_POST['hidden']+0)."'";
-$sql .= " , `views` = '".mysql_real_escape_string($_POST['views'])."'";
-$sql .= " , `category_ids` = '".mysql_real_escape_string(implode($_POST['category_ids'], ","))."'";
+$sql .= " , `hidden` = '".mysql_real_escape_string($_POST['hidden'])."'";
 
 			$this->db->query($sql);										
 			?>

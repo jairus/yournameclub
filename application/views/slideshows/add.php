@@ -90,80 +90,10 @@ else{
 		  <td><input type="text" name="name" size="40"></td>
 		</tr>
 		-->
-		<tr class="even required"><td>* Product Name:</td><td><input type="text" name="name" size="40"></td></tr>
-<tr class="odd required"><td>* Product Description:</td><td><textarea name="description"></textarea></td></tr>
-<tr class="even required"><td>* Price:</td><td><input type="text" name="price" size="40"></td></tr>
-<tr class="odd required"><td>* Image URL:</td><td><input type="text" name="image_url" size="40"></td></tr>
-<tr class="even required"><td>* Product URL:</td><td><input type="text" name="link" size="40"></td></tr>
-	</table>
-</td>
-<td width='50%'>
-	<table width="100%">
-		<tr class="even required"><td>* Category:</td><td>
-		<?php
-		$sql = "select * from `categories` where 1";
-		$q = $this->db->query($sql);
-		$cats = $q->result_array();
-		
-		$category_ids = explode(",", $record['category_ids']);
-		
-		$cat_ids = array();
-		foreach($category_ids as $cat_id){
-			$cat_ids[] = trim($cat_id, "|");
-		}
-		
-		
-		$t = count($cats);
-		if($t){
-			echo "<select name='category_ids[]' multiple>";
-			for($i=0; $i<$t; $i++){
-				if(in_array($cats[$i]['id'], $cat_ids)){
-					echo "<option value='|".$cats[$i]['id']."|' selected>".$cats[$i]['name']."</option>";
-				}
-				else{
-					echo "<option value='|".$cats[$i]['id']."|'>".$cats[$i]['name']."</option>";
-				}
-			}
-			echo "</select>";
-		}
-		?>
-		</td>
-		</tr>
-		<tr class="odd required"><td>Brand:</td><td>
-		<?php
-		$sql = "select * from `brands` where 1";
-		$q = $this->db->query($sql);
-		$brands = $q->result_array();
-		
-		
-		$t = count($brands);
-		if($t){
-			echo "<select name='brand_id'>";
-			for($i=0; $i<$t; $i++){
-				if($record['brand_id']==$brands[$i]['id']){
-					echo "<option value='".$brands[$i]['id']."' selected>".$brands[$i]['name']."</option>";
-				}
-				else{
-					echo "<option value='".$brands[$i]['id']."'>".$brands[$i]['name']."</option>";
-				}
-			}
-			echo "</select>";
-		}
-		?>
-		</td>
-		</tr>
-		<tr class="even required"><td>Featured:</td><td>
-		<?php
-		if($record['featured']){
-			echo "<input type='checkbox' checked value=1 name='featured'>";
-		}
-		else{
-			echo "<input type='checkbox' value=1 name='featured'>";
-		}
-		?>
-		</td>
-		</tr>
-		<tr class="odd required"><td>Hidden:</td><td>
+		<tr class="even required"><td>SlideShow Title:</td><td><input type="text" name="title" size="40"></td></tr>
+<tr class="odd required"><td>Text:</td><td><input type="text" name="text" size="40"></td></tr>
+<tr class="even required"><td>Image URL:</td><td><input type="text" name="image_url" size="40"></td></tr>
+<tr class="odd required"><td>Hidden:</td><td>
 		<?php
 		if($record['hidden']){
 			echo "<input type='checkbox' checked value=1 name='hidden'>";
@@ -172,10 +102,12 @@ else{
 			echo "<input type='checkbox' value=1 name='hidden'>";
 		}
 		?>
-		</td>
-		</tr>
-		<tr class="even required"><td>Views:</td><td><input type="text" name="views" size="15"></td></tr>
+</td></tr>
+
 	</table>
+</td>
+<td width='50%'>
+	&nbsp;
 </td>
 </tr>
 
@@ -209,18 +141,7 @@ if(is_array($pictures)){
 }
 if($record){
 	foreach($record as $key=>$value){	
-		if($key=='category_ids'){
-		}
-		else if($key=='brand_id'){
-		}
-		else if($key=='featured'){
-		}
-		else if($key=='hidden'){
-		}
-		else if($key=='price'){
-			?>
-			jQuery('[name="<?php echo $key; ?>"]').val("<?php echo number_format($value, "2", ".", ","); ?>");
-			<?php
+		if($key=='hidden'){
 		}
 		else if(trim($value)||1){
 			?>

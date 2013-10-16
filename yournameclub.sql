@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 14, 2013 at 12:20 PM
+-- Generation Time: Oct 16, 2013 at 06:01 PM
 -- Server version: 5.5.27
 -- PHP Version: 5.4.7
 
@@ -23,12 +23,34 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `brands`
+--
+
+CREATE TABLE IF NOT EXISTS `brands` (
+  `id` int(2) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+
+--
+-- Dumping data for table `brands`
+--
+
+INSERT INTO `brands` (`id`, `name`) VALUES
+(1, 'Bench'),
+(2, 'Nike'),
+(3, 'Generic');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `categories`
 --
 
 CREATE TABLE IF NOT EXISTS `categories` (
   `id` int(2) NOT NULL AUTO_INCREMENT,
   `name` varchar(128) NOT NULL,
+  `parent_category_id` int(2) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
@@ -36,8 +58,9 @@ CREATE TABLE IF NOT EXISTS `categories` (
 -- Dumping data for table `categories`
 --
 
-INSERT INTO `categories` (`id`, `name`) VALUES
-(2, 'Under Wear');
+INSERT INTO `categories` (`id`, `name`, `parent_category_id`) VALUES
+(2, 'Shirts', 0),
+(3, 'Shoes', 0);
 
 -- --------------------------------------------------------
 
@@ -49,18 +72,46 @@ CREATE TABLE IF NOT EXISTS `products` (
   `id` int(2) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `description` text NOT NULL,
+  `price` double(12,2) NOT NULL,
   `category_ids` varchar(255) NOT NULL COMMENT '|1|,|2|',
+  `brand_id` int(2) NOT NULL,
   `image_url` varchar(255) NOT NULL,
   `link` varchar(255) NOT NULL,
+  `featured` tinyint(1) NOT NULL,
+  `hidden` tinyint(1) NOT NULL,
+  `views` int(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`id`, `name`, `description`, `category_ids`, `image_url`, `link`) VALUES
-(4, 'Boxer Shorts', '', '|2|', '', '');
+INSERT INTO `products` (`id`, `name`, `description`, `price`, `category_ids`, `brand_id`, `image_url`, `link`, `featured`, `hidden`, `views`) VALUES
+(4, 'V-Neck', '', 0.00, '|2|', 3, '', '', 1, 0, 0),
+(5, 'Nike Cortez', 'Available of different colors and sizes', 1000.00, '|3|', 2, '', 'http://nelly.com/product/nike/cortez/?affid=123213', 1, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `slideshows`
+--
+
+CREATE TABLE IF NOT EXISTS `slideshows` (
+  `id` int(2) NOT NULL AUTO_INCREMENT,
+  `image_url` varchar(255) NOT NULL,
+  `title` varchar(128) NOT NULL,
+  `text` varchar(255) NOT NULL,
+  `hidden` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `slideshows`
+--
+
+INSERT INTO `slideshows` (`id`, `image_url`, `title`, `text`, `hidden`) VALUES
+(1, '', 'Hello World', 'Hello Hello baby', 1);
 
 -- --------------------------------------------------------
 

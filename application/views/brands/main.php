@@ -1,25 +1,3 @@
-<?php
-if(!$cats){
-	$sql = "select * from `categories` where 1";
-	$q = $this->db->query($sql);
-	$cats = $q->result_array();
-	$cats_temp = array();
-	foreach($cats as $value){
-		$cats_temp[$value['id']] = $value['name'];
-	}
-	$cats = $cats_temp;
-}
-if(!$brands){
-	$sql = "select * from `brands` where 1";
-	$q = $this->db->query($sql);
-	$brands = $q->result_array();
-	$brands_temp = array();
-	foreach($brands as $value){
-		$brands_temp[$value['id']] = $value['name'];
-	}
-	$brands = $brands_temp;
-}
-?>
 <script>
 function deleteRecord(co_id){
 	if(confirm("Are you sure you want to delete this record?")){
@@ -38,7 +16,7 @@ function deleteRecord(co_id){
 	}
 }
 
-function searchRecord(){
+function serachRecord(){
 	self.location = "<?php echo site_url(); ?><?php echo $controller; ?>/search/?search="+jQuery("#search").val()+"&filter="+jQuery("#sfilter").val();
 }
 function addRecord(){
@@ -53,16 +31,11 @@ function addRecord(){
 	<option value="name">Name</option>
 	<option value="id">ID</option>	
 	-->
-	<option value="name">Product Name</option>	
-<option value="description">Product Description</option>	
-<option value="image_url">Image URL</option>	
-<option value="link">Product URL</option>	
-<option value="category_ids">Category</option>	
-<option value="brand_id">Brand</option>	
+	<option value="name">Brand Name</option>	
 
 	</select>
 	Search: <input type='text' id='search' value="<?php echo sanitizeX($search); ?>" name='search' />
-	<input type='button' class='button normal' value='search' onclick='searchRecord()'>
+	<input type='button' class='button normal' value='search' onclick='serachRecord()'>
 	<input type='button' class='button normal' value='add' onclick='addRecord()'>
 </form>
 <?php
@@ -80,19 +53,7 @@ $t = count($records);
 <table>
 	<tr>
 		<th style="width:20px"></th>
-		<!--
-		<th>Name</th>
-		-->
-		<th>Product Name</th>
-<th>Product Description</th>
-<th>Price</th>
-<th>Image URL</th>
-<th>Product URL</th>
-<th>Category</th>
-<th>Brand</th>
-<th>Featured</th>
-<th>Hidden</th>
-<th>Views</th>
+		<th>Brand Name</th>
 
 		<th></th>
 	</tr>
@@ -102,54 +63,8 @@ $t = count($records);
 		?>
 		<tr id="tr<?php echo htmlentitiesX($records[$i]['id']); ?>" class="row" >
 			
-			<td><?php echo $start+$i+1; ?></td>	
-			<!--<td><?php //echo $records[$i]['name'];?></td>-->		
+			<td><?php echo $start+$i+1; ?></td>
 			<td><?php echo $records[$i]['name'];?></td>
-<td><?php echo $records[$i]['description'];?></td>
-<td><?php  echo number_format($records[$i]['price'], "2", ".", ","); ?></td>
-<td><?php echo $records[$i]['image_url'];?></td>
-<td><?php echo $records[$i]['link'];?></td>
-<td><?php 
-		
-		$category_ids = explode(",", $records[$i]['category_ids']);
-		$cat_ids = array();
-		foreach($category_ids as $cat_id){
-			$cat_ids[trim($cat_id, "|")] = $cats[trim($cat_id, "|")];
-		}
-		foreach($cat_ids as $key=>$value){
-			echo "<a href='".site_url("products/search/?filter=category_ids&search=".$value)."'>".$value."</a> ";
-		}
-
-?></td>
-<td><?php 
-		
-		$brand_id = $records[$i]['brand_id'];
-		echo "<a href='".site_url("products/search/?filter=brand_id&search=".$brands[$brand_id])."'>".$brands[$brand_id]."</a> ";
-
-?></td>
-<td><?php 
-		
-		$featured = $records[$i]['featured'];
-		if($featured){
-			echo "Yes";
-		}
-		else{
-			echo "No";
-		}
-
-?></td>
-<td><?php 
-		
-		$hidden = $records[$i]['hidden'];
-		if($hidden){
-			echo "Yes";
-		}
-		else{
-			echo "No";
-		}
-
-?></td>
-<td><?php echo $records[$i]['views'];?></td>
 
 			<td width='300px'>
 			[ <a href="<?php echo site_url(); ?><?php echo $controller; ?>/edit/<?php echo $records[$i]['id']?>" >Edit</a> ] 
